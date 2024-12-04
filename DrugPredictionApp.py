@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+#import xgboost as xgb
+#from sklearn.preprocessing import StandardScaler
+#from sklearn.model_selection import train_test_split
 
 # Load pre-trained XGBoost model (you should replace this with your trained model file path)
 #@st.cache_resource
@@ -74,8 +75,8 @@ if "input_data" in st.session_state and st.button("Predict Quantity"):
     input_data = pd.DataFrame([st.session_state['input_data']])
     
     # Perform feature scaling or transformations if required (example here is placeholder)
-    scaler = StandardScaler()
-    input_scaled = scaler.fit_transform(input_data)
+    #scaler = StandardScaler()
+    #input_scaled = scaler.fit_transform(input_data)
     
     # Predict using the loaded model
     #prediction = model.predict(input_scaled)
@@ -144,4 +145,37 @@ uploaded_file = st.file_uploader("Upload a CSV file for bulk processing:")
 if uploaded_file:
     data = pd.read_csv(uploaded_file)
     st.dataframe(data)  # Display uploaded data
+
+import streamlit as st
+import streamlit_authenticator as stauth
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # For environment variable handling
+
+
+# Define usernames and passwords (hashed)
+usernames = ['user1', 'user2']
+names = ['User One', 'User Two']
+passwords = ['hashed_password1', 'hashed_password2']
+
+authenticator = stauth.Authenticate(
+    names, usernames, passwords,
+    "cookie_name", "random_key", cookie_expiry_days=30
+)
+
+name, authentication_status, username = authenticator.login("Login", "main")
+
+if authentication_status:
+    st.success(f"Welcome {name}!")
+    # Place the rest of your app code here
+elif authentication_status is False:
+    st.error("Username or password is incorrect")
+elif authentication_status is None:
+    st.warning("Please enter your username and password")
+
+import bcrypt
+
+hashed_password = bcrypt.hashpw("your_password".encode(), bcrypt.gensalt())
+print(hashed_password)
 
