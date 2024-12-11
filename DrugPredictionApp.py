@@ -146,36 +146,3 @@ if uploaded_file:
     data = pd.read_csv(uploaded_file)
     st.dataframe(data)  # Display uploaded data
 
-import streamlit as st
-import streamlit_authenticator as stauth
-from dotenv import load_dotenv
-import os
-
-load_dotenv()  # For environment variable handling
-
-
-# Define usernames and passwords (hashed)
-usernames = ['user1', 'user2']
-names = ['User One', 'User Two']
-passwords = ['hashed_password1', 'hashed_password2']
-
-authenticator = stauth.Authenticate(
-    names, usernames, passwords,
-    "cookie_name", "random_key", cookie_expiry_days=30
-)
-
-name, authentication_status, username = authenticator.login("Login", "main")
-
-if authentication_status:
-    st.success(f"Welcome {name}!")
-    # Place the rest of your app code here
-elif authentication_status is False:
-    st.error("Username or password is incorrect")
-elif authentication_status is None:
-    st.warning("Please enter your username and password")
-
-import bcrypt
-
-hashed_password = bcrypt.hashpw("your_password".encode(), bcrypt.gensalt())
-print(hashed_password)
-
